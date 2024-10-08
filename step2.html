@@ -3,9 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Calculator CAPTCHA</title>
+    <style>
+        .captcha-container {
+    width: 300px;
+    margin: 50px auto;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.captcha-question {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+#captchaInput {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#verifyCaptcha {
+    padding: 10px 20px;
+}
+
+#resultMessage {
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+    </style>>
 </head>
 <body>
-    <p>this is step2</p>    
+    <div class="captcha-container">
+        <div class="captcha-question" id="captchaQuestion"></div>
+        <input type="text" id="captchaInput" placeholder="Enter the result">
+        <button id="verifyCaptcha">Verify</button>
+        <div id="resultMessage"></div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const captchaQuestion = document.getElementById('captchaQuestion');
+    const captchaInput = document.getElementById('captchaInput');
+    const verifyCaptcha = document.getElementById('verifyCaptcha');
+    const resultMessage = document.getElementById('resultMessage');
+    
+    function generateCaptcha() {
+        const num1 = Math.floor(Math.random() * 10) + 1;
+        const num2 = Math.floor(Math.random() * 10) + 1;
+        const operator = '+';
+        const result = num1 + num2;
+
+        captchaQuestion.textContent = `What is ${num1} ${operator} ${num2}?`;
+        captchaQuestion.dataset.result = result;
+    }
+    
+    verifyCaptcha.addEventListener('click', function() {
+        const userInput = parseInt(captchaInput.value, 10);
+        const correctAnswer = parseInt(captchaQuestion.dataset.result, 10);
+
+        if (userInput === correctAnswer) {
+            resultMessage.textContent = 'CAPTCHA verified!';
+            resultMessage.style.color = 'green';
+        } else {
+            resultMessage.textContent = 'Incorrect CAPTCHA, please try again.';
+            resultMessage.style.color = 'red';
+            generateCaptcha(); // Generate a new CAPTCHA on failure
+        }
+    });
+    
+    generateCaptcha(); // Initial CAPTCHA generation
+});
+
+    </script>
 </body>
 </html>
